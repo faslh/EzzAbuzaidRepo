@@ -1,0 +1,14 @@
+{
+  "functions": [
+    {
+      "ignore": [
+        "**/node_modules/**",
+        "**/src/**",
+        "**/public/**"
+      ],
+      "codebase": "faslh",
+      "source": "dist",
+      "runtime": "nodejs16"
+    }
+  ]
+}

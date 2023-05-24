@@ -1,0 +1,44 @@
+{
+  "version": "0.0.0",
+  "name": "faslh-sample-project",
+  "main": "index.js",
+  "scripts": {
+    "build:remote": "echo 'already built by CI.'",
+    "build:dev": "webpack --mode=development --entry ./src/server.ts",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "build:watch": "npm run build:dev -- --watch",
+    "migration:generate": "./node_modules/.bin/typeorm migration:generate ./src/migrations/migrations --dataSource ./src/datasource -o --pretty --outputJs"
+  },
+  "dependencies": {
+    "require-context": "^1.1.0",
+    "rfc-7807-problem-details": "^1.1.0",
+    "dotenv": "^14.2.0",
+    "koa": "latest",
+    "@koa/router": "latest",
+    "koa-body": "latest",
+    "koa-bodyparser": "latest",
+    "koa-logger": "latest",
+    "koa-qs": "latest",
+    "@koa/cors": "latest",
+    "@types/koa__cors": "^3.3.0",
+    "@types/koa__router": "^12.0.0",
+    "@types/koa-bodyparser": "^4.3.10",
+    "@types/koa-qs": "^2.0.0",
+    "firebase-functions": "latest",
+    "firebase-admin": "latest",
+    "pg": "latest",
+    "typeorm": "latest"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "nodemon": "^2.0.15",
+    "ts-loader": "^9.4.2",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "@types/webpack-env": "^1.18.0",
+    "webpack-dev-server": "^4.11.1",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
