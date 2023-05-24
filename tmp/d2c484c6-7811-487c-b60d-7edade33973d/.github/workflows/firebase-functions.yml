@@ -1,0 +1,81 @@
+name: Deploy To Firebase Functions
+on:
+  workflow_dispatch:
+    inputs:
+      correlationId:
+        description: '"Correlation Id"'
+        required: true
+env:
+  FASLH_API_URL: https://us-central1-capable-vista-373220.cloudfunctions.net/ghevents
+jobs:
+  deploy_to_firebase_functions:
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: checkout App Repo
+        uses: actions/checkout@v3
+      - id: cache
+        name: Cache Or Restore Node Modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+      - uses: fjogeleit/http-request-action@v1
+        if: '{{ always() }}'
+        with:
+          url: ${{ env.FASLH_API_URL }}
+          method: POST
+          data: >-
+            '{"stage":"ci","status":"${{ steps.checkout.outcome
+            }}","jobName":"${{ github.job }}","correlationId":"${{
+            github.event.inputs.correlationId }}","lastStep":false}'
+      - id: install
+        name: Install Deps
+        run: npm install
+      - uses: fjogeleit/http-request-action@v1
+        if: '{{ always() }}'
+        with:
+          url: ${{ env.FASLH_API_URL }}
+          method: POST
+          data: >-
+            '{"stage":"install_deps","status":"${{ steps.install.outcome
+            }}","jobName":"${{ github.job }}","correlationId":"${{
+            github.event.inputs.correlationId }}","lastStep":false}'
+      - id: build
+        name: Build
+        run: npm run build:prod -- --entry ./src/firebase-functions.ts
+      - uses: fjogeleit/http-request-action@v1
+        if: '{{ always() }}'
+        with:
+          url: ${{ env.FASLH_API_URL }}
+          method: POST
+          data: >-
+            '{"stage":"build","status":"${{ steps.build.outcome
+            }}","jobName":"${{ github.job }}","correlationId":"${{
+            github.event.inputs.correlationId }}","lastStep":false}'
+      - name: Collect Env Variables
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_FIREBASE_FUNCTION_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_FUNCTION_SERVICE_ACCOUNT_KEY }}
+          envkey_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
+          envkey_FIREBASE_FUNCTION_PROJECT_ID: ${{ secrets.FIREBASE_FUNCTION_PROJECT_ID }}
+          directory: ./
+          file_name: ./dist/.env
+          fail_on_empty: false
+      - id: deploy
+        name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions --debug
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_FUNCTION_SERVICE_ACCOUNT_KEY }}
+          PROJECT_ID: ${{ secrets.FIREBASE_FUNCTION_PROJECT_ID }}
+      - uses: fjogeleit/http-request-action@v1
+        if: '{{ always() }}'
+        with:
+          url: ${{ env.FASLH_API_URL }}
+          method: POST
+          data: >-
+            '{"stage":"deploy","status":"${{ steps.deploy.outcome
+            }}","jobName":"${{ github.job }}","correlationId":"${{
+            github.event.inputs.correlationId }}","lastStep":true}'
