@@ -26,14 +26,14 @@ jobs:
           url: ${{ env.FASLH_API_URL }}
           method: POST
           customHeaders: '{"Content-Type": "application/json"}'
-          data: |-
-            toJson({
-             "stage": "ci",
-             "status": "${{ steps.checkout.outcome }}",
-             "jobName": "${{ github.job }}",
-             "correlationId": "${{ github.event.inputs.correlationId }}",
-             "lastStep": false
-            })
+          data: >-
+            {
+               "stage": "ci",
+               "status": "${{ steps.checkout.outcome }}",
+               "jobName": "${{ github.job }}",
+               "correlationId": "${{ github.event.inputs.correlationId }}",
+               "lastStep": false
+            }
       - id: install
         name: Install Deps
         run: npm install
