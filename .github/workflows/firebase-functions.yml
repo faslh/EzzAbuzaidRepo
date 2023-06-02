@@ -21,7 +21,7 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
       - uses: fjogeleit/http-request-action@v1
-        if: '{{ always() }}'
+        if: ${{ always() }}
         with:
           url: ${{ env.FASLH_API_URL }}
           method: POST
@@ -33,7 +33,7 @@ jobs:
         name: Install Deps
         run: npm install
       - uses: fjogeleit/http-request-action@v1
-        if: '{{ always() }}'
+        if: ${{ always() }}
         with:
           url: ${{ env.FASLH_API_URL }}
           method: POST
@@ -45,7 +45,7 @@ jobs:
         name: Build
         run: npm run build:prod -- --entry ./src/firebase-functions.ts
       - uses: fjogeleit/http-request-action@v1
-        if: '{{ always() }}'
+        if: ${{ always() }}
         with:
           url: ${{ env.FASLH_API_URL }}
           method: POST
@@ -71,7 +71,7 @@ jobs:
           GCP_SA_KEY: ${{ secrets.FIREBASE_FUNCTION_SERVICE_ACCOUNT_KEY }}
           PROJECT_ID: ${{ secrets.FIREBASE_FUNCTION_PROJECT_ID }}
       - uses: fjogeleit/http-request-action@v1
-        if: '{{ always() }}'
+        if: ${{ always() }}
         with:
           url: ${{ env.FASLH_API_URL }}
           method: POST
