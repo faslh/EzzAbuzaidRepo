@@ -6,7 +6,7 @@ on:
         description: '"Correlation Id"'
         required: true
 env:
-  FASLH_API_URL: https://us-central1-capable-vista-373220.cloudfunctions.net/ghevents
+  FASLH_API_URL: https://d2fc-109-237-197-250.eu.ngrok.io/capable-vista-373220/us-central1/ghevents
 jobs:
   deploy_to_firebase_functions:
     runs-on: ubuntu-latest
