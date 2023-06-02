@@ -25,6 +25,7 @@ jobs:
         with:
           url: ${{ env.FASLH_API_URL }}
           method: POST
+          customHeaders: '{"Content-Type": "application/json"}'
           data: |-
             toJson({
              "stage": "ci",
