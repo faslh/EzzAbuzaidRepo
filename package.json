@@ -40,6 +40,10 @@
     "@types/webpack-env": "^1.18.0",
     "webpack-dev-server": "^4.11.1",
     "webpack-node-externals": "^3.0.0",
-    "tsconfig-paths-webpack-plugin": "^4.0.0"
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "ajv": "latest",
+    "ajv-formats": "latest",
+    "ajv-errors": "latest",
+    "ajv-keywords": "latest"
   }
 }
